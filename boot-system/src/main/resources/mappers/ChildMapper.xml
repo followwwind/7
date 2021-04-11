@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wind.boot.dao.ChildMapper" >
+    <resultMap id="BaseResultMap" type="com.wind.boot.entity.po.Child" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="user_id" property="userId" jdbcType="INTEGER" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="age" property="age" jdbcType="INTEGER" />
+        <result column="tel" property="tel" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+
+    <sql id="Column_List" >
+        id,user_id,name,age,tel,create_time
+    </sql>
+
+    <sql id="Column_Selective_List" >
+        <trim prefix="" suffix="" suffixOverrides="," prefixOverrides=",">
+			<if test="id!= null" >
+				, id = #{id,jdbcType=INTEGER}
+			</if>
+			<if test="userId!= null" >
+				, user_id = #{userId,jdbcType=INTEGER}
+			</if>
+			<if test="name!= null and name!=''" >
+				, name = #{name,jdbcType=VARCHAR}
+			</if>
+			<if test="age!= null" >
+				, age = #{age,jdbcType=INTEGER}
+			</if>
+			<if test="tel!= null and tel!=''" >
+				, tel = #{tel,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime!= null" >
+				, create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+    </sql>
+
+    <sql id="Column_Selective_And_List" >
+        <if test="id!= null" >
+			and id = #{id,jdbcType=INTEGER}
+		</if>
+		<if test="userId!= null" >
+			and user_id = #{userId,jdbcType=INTEGER}
+		</if>
+		<if test="name!= null and name!=''" >
+			and name = #{name,jdbcType=VARCHAR}
+		</if>
+		<if test="age!= null" >
+			and age = #{age,jdbcType=INTEGER}
+		</if>
+		<if test="tel!= null and tel!=''" >
+			and tel = #{tel,jdbcType=VARCHAR}
+		</if>
+		<if test="createTime!= null" >
+			and create_time = #{createTime,jdbcType=TIMESTAMP}
+		</if>
+		
+    </sql>
+
+    <sql id="Column_Assign_List" >
+        #{id,jdbcType=INTEGER},#{userId,jdbcType=INTEGER},#{name,jdbcType=VARCHAR},#{age,jdbcType=INTEGER},#{tel,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP}
+    </sql>
+
+    <sql id="InsertBatch_List" >
+        #{item.id,jdbcType=INTEGER},#{item.userId,jdbcType=INTEGER},#{item.name,jdbcType=VARCHAR},#{item.age,jdbcType=INTEGER},#{item.tel,jdbcType=VARCHAR},
+		#{item.createTime,jdbcType=TIMESTAMP}
+    </sql>
+
+    <insert id="insert" parameterType="com.wind.boot.entity.po.Child" useGeneratedKeys="true" keyProperty="id">
+        insert into child (
+        <include refid="Column_List" />
+        ) values (
+        <include refid="Column_Assign_List" />
+        )
+    </insert>
+
+    <!--<insert id="insertBatch" >-->
+    <!--insert into child (-->
+    <!--<include refid="Column_List" />-->
+    <!--) values-->
+    <!--<foreach collection="list" item="item" separator=",">-->
+    <!--(-->
+    <!--<include refid="InsertBatch_List" />-->
+    <!--)-->
+    <!--</foreach>-->
+    <!--</insert>-->
+
+    <delete id="deleteById">
+        delete from child where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <select id="findById" resultType="com.wind.boot.entity.vo.ChildVO">
+        select
+        r.id,r.user_id userId,r.name,r.age,r.tel,r.create_time createTime
+        from child r
+        where r.id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <update id="update" parameterType="com.wind.boot.entity.po.Child" >
+        update child
+        <set>
+            <include refid="Column_Selective_List" />
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <delete id="delete" parameterType="com.wind.boot.entity.po.Child" >
+        delete from child where
+        <include refid="Column_Selective_And_List" />
+    </delete>
+
+    <select id="list" resultType="com.wind.boot.entity.vo.ChildVO" parameterType="com.wind.boot.entity.dto.ChildSearchDTO">
+        select
+        r.id,r.user_id userId,r.name,r.age,r.tel,r.create_time createTime
+        from child r
+        where 1 = 1
+        <if test="id!= null" >
+			and r.id = #{id,jdbcType=INTEGER}
+		</if>
+		<if test="userId!= null" >
+			and r.user_id = #{userId,jdbcType=INTEGER}
+		</if>
+		<if test="name!= null and name!=''" >
+			and r.name like concat('%', #{name,jdbcType=VARCHAR}, '%')
+		</if>
+		<if test="age!= null" >
+			and r.age = #{age,jdbcType=INTEGER}
+		</if>
+		<if test="tel!= null and tel!=''" >
+			and r.tel like concat('%', #{tel,jdbcType=VARCHAR}, '%')
+		</if>
+		<if test="createTime!= null" >
+			and r.create_time = #{createTime,jdbcType=TIMESTAMP}
+		</if>
+		
+    </select>
+</mapper>
+

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wind.boot.dao.VaccineMapper" >
+    <resultMap id="BaseResultMap" type="com.wind.boot.entity.po.Vaccine" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="info" property="info" jdbcType="VARCHAR" />
+        <result column="count" property="count" jdbcType="INTEGER" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+
+    <sql id="Column_List" >
+        id,name,info,count,create_time
+    </sql>
+
+    <sql id="Column_Selective_List" >
+        <trim prefix="" suffix="" suffixOverrides="," prefixOverrides=",">
+			<if test="id!= null" >
+				, id = #{id,jdbcType=INTEGER}
+			</if>
+			<if test="name!= null and name!=''" >
+				, name = #{name,jdbcType=VARCHAR}
+			</if>
+			<if test="info!= null and info!=''" >
+				, info = #{info,jdbcType=VARCHAR}
+			</if>
+			<if test="count!= null" >
+				, count = #{count,jdbcType=INTEGER}
+			</if>
+			<if test="createTime!= null" >
+				, create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+    </sql>
+
+    <sql id="Column_Selective_And_List" >
+        <if test="id!= null" >
+			and id = #{id,jdbcType=INTEGER}
+		</if>
+		<if test="name!= null and name!=''" >
+			and name = #{name,jdbcType=VARCHAR}
+		</if>
+		<if test="info!= null and info!=''" >
+			and info = #{info,jdbcType=VARCHAR}
+		</if>
+		<if test="count!= null" >
+			and count = #{count,jdbcType=INTEGER}
+		</if>
+		<if test="createTime!= null" >
+			and create_time = #{createTime,jdbcType=TIMESTAMP}
+		</if>
+		
+    </sql>
+
+    <sql id="Column_Assign_List" >
+        #{id,jdbcType=INTEGER},#{name,jdbcType=VARCHAR},#{info,jdbcType=VARCHAR},#{count,jdbcType=INTEGER},#{createTime,jdbcType=TIMESTAMP}
+		
+    </sql>
+
+    <sql id="InsertBatch_List" >
+        #{item.id,jdbcType=INTEGER},#{item.name,jdbcType=VARCHAR},#{item.info,jdbcType=VARCHAR},#{item.count,jdbcType=INTEGER},#{item.createTime,jdbcType=TIMESTAMP}
+		
+    </sql>
+
+    <insert id="insert" parameterType="com.wind.boot.entity.po.Vaccine" useGeneratedKeys="true" keyProperty="id">
+        insert into vaccine (
+        <include refid="Column_List" />
+        ) values (
+        <include refid="Column_Assign_List" />
+        )
+    </insert>
+
+    <!--<insert id="insertBatch" >-->
+    <!--insert into vaccine (-->
+    <!--<include refid="Column_List" />-->
+    <!--) values-->
+    <!--<foreach collection="list" item="item" separator=",">-->
+    <!--(-->
+    <!--<include refid="InsertBatch_List" />-->
+    <!--)-->
+    <!--</foreach>-->
+    <!--</insert>-->
+
+    <delete id="deleteById">
+        delete from vaccine where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <select id="findById" resultType="com.wind.boot.entity.vo.VaccineVO">
+        select
+        r.id,r.name,r.info,r.count,r.create_time createTime
+        from vaccine r
+        where r.id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <update id="update" parameterType="com.wind.boot.entity.po.Vaccine" >
+        update vaccine
+        <set>
+            <include refid="Column_Selective_List" />
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <delete id="delete" parameterType="com.wind.boot.entity.po.Vaccine" >
+        delete from vaccine where
+        <include refid="Column_Selective_And_List" />
+    </delete>
+
+    <select id="list" resultType="com.wind.boot.entity.vo.VaccineVO" parameterType="com.wind.boot.entity.dto.VaccineSearchDTO">
+        select
+        r.id,r.name,r.info,r.count,r.create_time createTime
+        from vaccine r
+        where 1 = 1
+        <if test="id!= null" >
+			and r.id = #{id,jdbcType=INTEGER}
+		</if>
+		<if test="name!= null and name!=''" >
+			and r.name like concat('%', #{name,jdbcType=VARCHAR}, '%')
+		</if>
+		<if test="info!= null and info!=''" >
+			and r.info like concat('%', #{info,jdbcType=VARCHAR}, '%')
+		</if>
+		<if test="count!= null" >
+			and r.count = #{count,jdbcType=INTEGER}
+		</if>
+		<if test="createTime!= null" >
+			and r.create_time = #{createTime,jdbcType=TIMESTAMP}
+		</if>
+		
+    </select>
+</mapper>
+

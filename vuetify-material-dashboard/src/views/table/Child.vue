@@ -1,0 +1,9 @@
+<template>
+  <v-container
+    id="regular-tables"
+    fluid
+    tag="section"
+  >
+  123
+  </v-container>
+</template>
